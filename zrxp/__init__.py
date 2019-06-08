@@ -20,7 +20,7 @@ grammar = Grammar(
     field_sep = ~r"\s+"
 
     comment = ~r"##.*"
-    ws = ~"\s*"
+    ws = ~r"\s*"
     """
 )
 
