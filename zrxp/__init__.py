@@ -17,9 +17,10 @@ grammar = Grammar(
 
     record = field (field_sep field)* ws+
     field = ~r"[-\w\d\.]+"
-    field_sep = ~r"\s+"
+    field_sep = ~r"[ \t]+"
 
     comment = ~r"##.*"
+    newline = ~r"[\n\r]+"
     ws = ~r"\s*"
     """
 )
@@ -43,7 +44,17 @@ class ZRXPVisitor(NodeVisitor):
         return [field for (field, sep) in metadata]
 
     def visit_metadata_field(self, node, visited_children):
-        print(node.text)
+        return node.text
+
+    def visit_records(self, node, visited_children):
+        return visited_children
+
+    def visit_record(self, node, visited_children):
+        field, fields_comb, _ = visited_children
+        fields = [f for _, f in fields_comb]
+        return [field] + fields
+
+    def visit_field(self, node, visited_children):
         return node.text
 
     def generic_visit(self, node, visited_children):
@@ -59,10 +70,11 @@ with open("05BJ004.HG.datum.O.zrx", "r") as f:
     output = zv.visit(tree)
     print(output)
 
+zv = ZRXPVisitor()
 with open("multi_ts.zrx", "r") as f:
     s = f.read()
     tree_multi = grammar.parse(s)
     print(tree_multi)
 
-    output_multi = zv.visit(tree)
+    output_multi = zv.visit(tree_multi)
     print(output_multi)
