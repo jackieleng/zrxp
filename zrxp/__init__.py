@@ -1,5 +1,7 @@
+from io import StringIO
 from pathlib import Path
 
+import pandas as pd
 from parsimonious import Grammar, NodeVisitor
 
 
@@ -108,32 +110,83 @@ class ZRXPVisitor(NodeVisitor):
         return visited_children or node
 
 
-zrxp_visitor = ZRXPVisitor()
+class SimpleZRXPVisitor(NodeVisitor):
+    def visit_zrxp(self, node, visited_children):
+        return visited_children
 
+    def visit_single_timeseries(self, node, visited_children):
+        metadata, records = visited_children
+        output = {"metadata": metadata, "records": records}
+        return output
 
-def raw_parse_zrxp(s: str):
-    """
-    Parse the zrxp string and return metadata and records unprocessed.
-    """
-    tree = ZRXP_GRAMMAR.parse(s)
-    result = zrxp_visitor.visit(tree)
-    return result
+    def visit_metadata_headers(self, node, visited_children):
+        flat_list = [item for sublist in visited_children for item in sublist]
+        return flat_list
+
+    def visit_metadata_header(self, node, visited_children):
+        _, metadata, _ = visited_children
+        return [field for (field, sep) in metadata]
+
+    def visit_metadata_field(self, node, visited_children):
+        k, v = visited_children
+        try:
+            return (k[0], v)
+        except TypeError:
+            return (k.text, v)
+
+    def visit_metadata_key(self, node, visited_children):
+        return node.text
+
+    def visit_metadata_value(self, node, visited_children):
+        return node.text
+
+    def visit_records(self, node, visited_children):
+        return node
+
+    # def visit_record(self, node, visited_children):
+    #     field, fields_comb, _ = visited_children
+    #     fields = [f for _, f in fields_comb]
+    #     return [field] + fields
+
+    # def visit_field(self, node, visited_children):
+    #     return node.text
+
+    def generic_visit(self, node, visited_children):
+        return visited_children or node
 
 
 def parse(s: str):
     """
     Parse zrxp file and split the metadata according to zrxp keywords.
     """
-    return raw_parse_zrxp(s)
+    zrxp_visitor = ZRXPVisitor()
+    tree = ZRXP_GRAMMAR.parse(s)
+    return zrxp_visitor.visit(tree)
 
 
-def parse_file(filepath: str):
+def parse_pandas(s: str):
+    """
+    Parse zrxp string and use pandas for parsing records.
+    """
+    zrxp_visitor = SimpleZRXPVisitor()
+    tree = ZRXP_GRAMMAR_SIMPLE.parse(s)
+    result = zrxp_visitor.visit(tree)
+    for ts in result:
+        ts['records'] = pd.read_csv(StringIO(ts['records'].text))
+    return result
+
+
+def parse_file(filepath: str, engine='default'):
     path = Path(filepath)
     text = path.read_text()
-    return parse(text)
+    engines = {
+        'default': parse,
+        'pandas': parse_pandas,
+    }
+    return engines[engine](text)
 
 
-output = parse_file("data/05BJ004.HG.datum.O.zrx")
+output = parse_file("data/05BJ004.HG.datum.O.zrx", engine='pandas')
 print(output)
 # output2 = parse_file("data/K-Greim-SG-cmd-2000-2004.zrx")
 # print(output2)
