@@ -176,7 +176,10 @@ def parse_pandas(s: str):
     return result
 
 
-def parse_file(filepath: str, engine='default'):
+def parse_file(filepath: str, engine: str = 'default'):
+    """
+    Open and parse a zrxp file.
+    """
     path = Path(filepath)
     text = path.read_text()
     engines = {
