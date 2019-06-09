@@ -5,7 +5,10 @@ from pathlib import Path
 import pandas as pd
 
 from .grammar import (
-    ZRXP_GRAMMAR, ZRXP_GRAMMAR_SIMPLE, ZRXPVisitor, SimpleZRXPVisitor
+    ZRXP_GRAMMAR,
+    ZRXP_GRAMMAR_SIMPLE,
+    ZRXPVisitor,
+    SimpleZRXPVisitor,
 )
 
 zrxp_visitor = ZRXPVisitor()
@@ -39,21 +42,19 @@ def parse_csv(s: str):
     result = simple_zrxp_visitor.visit(tree)
     for ts in result:
         reader = csv.reader(
-            StringIO(ts["records"].text),
-            delimiter=' ',
-            skipinitialspace=True,
+            StringIO(ts["records"].text), delimiter=" ", skipinitialspace=True
         )
         ts["records"] = list(reader)
     return result
 
 
-def read_file(filepath: str, engine: str = "default"):
+def read_file(filepath: str, engine: str = "csv"):
     """
     Open and parse a zrxp file.
     """
     path = Path(filepath)
     text = path.read_text()
-    engines = {"default": parse, "pandas": parse_pandas, 'csv': parse_csv}
+    engines = {"parsimonious": parse, "pandas": parse_pandas, "csv": parse_csv}
     return engines[engine](text)
 
 
