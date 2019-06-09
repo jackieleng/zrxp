@@ -44,7 +44,7 @@ ZRXP_GRAMMAR_SIMPLE = Grammar(
     single_timeseries = metadata_headers records
 
     metadata_headers = metadata_header+
-    records = record+
+    records = !hashtag ~r"[\w\d\s\.,-]*"
 
     metadata_header = hashtag (metadata_field metadata_sep+)+ ws
     metadata_field = metadata_key? metadata_value
@@ -55,7 +55,6 @@ ZRXP_GRAMMAR_SIMPLE = Grammar(
     metadata_value = ~r"((?!(\|\*\|)).)+"
     metadata_sep = "|*|"
 
-    record = !hashtag ~r".+" ws
 
     hashtag = "#"
     comment = ~r"##.*"
