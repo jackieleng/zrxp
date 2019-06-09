@@ -193,9 +193,9 @@ def parse_file(filepath: str, engine: str = "default"):
     return engines[engine](text)
 
 
-output = parse_file("data/05BJ004.HG.datum.O.zrx", engine="pandas")
-print(output)
+# output = parse_file("data/05BJ004.HG.datum.O.zrx", engine="pandas")
+# print(output)
 # output2 = parse_file("data/K-Greim-SG-cmd-2000-2004.zrx", engine='pandas')
 # print(output2)
-output_multi = parse_file("data/multi_ts.zrx", engine="pandas")
-print(output_multi)
+# output_multi = parse_file("data/multi_ts.zrx", engine="pandas")
+# print(output_multi)
