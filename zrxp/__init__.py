@@ -33,6 +33,36 @@ ZRXP_GRAMMAR = Grammar(
 )
 
 
+# zrxp grammer without explicit parsing of record fields
+# i.e., this can be done using a more efficient parser like
+# pandas.read_csv
+ZRXP_GRAMMAR_SIMPLE = Grammar(
+    r"""
+    zrxp = single_timeseries+
+    single_timeseries = metadata_headers records
+
+    metadata_headers = metadata_header+
+    records = record+
+
+    metadata_header = hashtag (metadata_field metadata_sep+)+ ws
+    metadata_field = metadata_key? metadata_value
+    metadata_key =
+        "ZRXPVERSION" / "ZRXPMODE" / "SANR" / "REXCHANGE" / "TZ" /
+        "SNAME" / "CNR" / "RTIMEVL" / "CUNIT" / "RINVAL" /
+        "RNR" / "LAYOUT"
+    metadata_value = ~r"((?!(\|\*\|)).)+"
+    metadata_sep = "|*|"
+
+    record = !hashtag ~r".+" ws
+
+    hashtag = "#"
+    comment = ~r"##.*"
+    newline = ~r"[\n\r]+"
+    ws = ~r"\s*"
+    """
+)
+
+
 class ZRXPVisitor(NodeVisitor):
     def visit_zrxp(self, node, visited_children):
         return visited_children
