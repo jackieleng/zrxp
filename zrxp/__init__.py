@@ -1,3 +1,4 @@
+import csv
 from io import StringIO
 from pathlib import Path
 
@@ -30,19 +31,35 @@ def parse_pandas(s: str):
     return result
 
 
-def parse_file(filepath: str, engine: str = "default"):
+def parse_csv(s: str):
+    """
+    Parse zrxp string and use builtin csv module for parsing records.
+    """
+    tree = ZRXP_GRAMMAR_SIMPLE.parse(s)
+    result = simple_zrxp_visitor.visit(tree)
+    for ts in result:
+        reader = csv.reader(
+            StringIO(ts["records"].text),
+            delimiter=' ',
+            skipinitialspace=True,
+        )
+        ts["records"] = list(reader)
+    return result
+
+
+def read_file(filepath: str, engine: str = "default"):
     """
     Open and parse a zrxp file.
     """
     path = Path(filepath)
     text = path.read_text()
-    engines = {"default": parse, "pandas": parse_pandas}
+    engines = {"default": parse, "pandas": parse_pandas, 'csv': parse_csv}
     return engines[engine](text)
 
 
-# output = parse_file("data/05BJ004.HG.datum.O.zrx", engine="pandas")
+# output = read_file("data/05BJ004.HG.datum.O.zrx", engine="pandas")
 # print(output)
-# output2 = parse_file("data/K-Greim-SG-cmd-2000-2004.zrx", engine='pandas')
+# output2 = read_file("data/K-Greim-SG-cmd-2000-2004.zrx", engine='pandas')
 # print(output2)
-# output_multi = parse_file("data/multi_ts.zrx", engine="pandas")
+# output_multi = read_file("data/multi_ts.zrx", engine="pandas")
 # print(output_multi)
