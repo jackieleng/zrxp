@@ -22,3 +22,20 @@ increased performance.
 3  20000101004500 2.26   127 3
 4  20000101010000 2.26   127 3
 ```
+
+
+## Benchmarks
+
+```
+In [19]: %timeit a = zrxp.read_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='csv')
+130 ms ± 969 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+
+In [20]: %timeit a = zrxp.read_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='pandas')
+152 ms ± 1.01 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+
+In [21]: %timeit a = zrxp.read_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='default')
+9.32 s ± 62.5 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+```
+
+Apparently csv is faster than pandas. But for single runs this is almost
+never the case...
