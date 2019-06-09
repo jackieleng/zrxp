@@ -18,6 +18,8 @@ simple_zrxp_visitor = SimpleZRXPVisitor()
 def parse(s: str):
     """
     Parse zrxp file and split the metadata according to zrxp keywords.
+
+    Parsing is uses parsimonious only.
     """
     tree = ZRXP_GRAMMAR.parse(s)
     return zrxp_visitor.visit(tree)
@@ -48,13 +50,13 @@ def parse_csv(s: str):
     return result
 
 
-def read_file(filepath: str, engine: str = "csv"):
+def read_file(filepath: str, engine: str = "default"):
     """
     Open and parse a zrxp file.
     """
     path = Path(filepath)
     text = path.read_text()
-    engines = {"parsimonious": parse, "pandas": parse_pandas, "csv": parse_csv}
+    engines = {"default": parse, "pandas": parse_pandas, "csv": parse_csv}
     return engines[engine](text)
 
 
