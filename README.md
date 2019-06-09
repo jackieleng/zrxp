@@ -1,6 +1,8 @@
 # zrxp
 
-ZRXP parser. Uses `parsimonious` for generic grammar definition and parsing, and `pandas` for parsing the time series data block for increased performance.
+ZRXP parser. Uses `parsimonious` for generic grammar definition and parsing,
+and (optionally) `pandas` for parsing the time series data block with
+increased performance.
 
 
 ```
