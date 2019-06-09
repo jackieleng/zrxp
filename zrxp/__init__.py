@@ -172,26 +172,23 @@ def parse_pandas(s: str):
     tree = ZRXP_GRAMMAR_SIMPLE.parse(s)
     result = zrxp_visitor.visit(tree)
     for ts in result:
-        ts['records'] = pd.read_csv(StringIO(ts['records'].text))
+        ts["records"] = pd.read_csv(StringIO(ts["records"].text))
     return result
 
 
-def parse_file(filepath: str, engine: str = 'default'):
+def parse_file(filepath: str, engine: str = "default"):
     """
     Open and parse a zrxp file.
     """
     path = Path(filepath)
     text = path.read_text()
-    engines = {
-        'default': parse,
-        'pandas': parse_pandas,
-    }
+    engines = {"default": parse, "pandas": parse_pandas}
     return engines[engine](text)
 
 
-output = parse_file("data/05BJ004.HG.datum.O.zrx", engine='pandas')
+output = parse_file("data/05BJ004.HG.datum.O.zrx", engine="pandas")
 print(output)
 # output2 = parse_file("data/K-Greim-SG-cmd-2000-2004.zrx", engine='pandas')
 # print(output2)
-output_multi = parse_file("data/multi_ts.zrx", engine='pandas')
+output_multi = parse_file("data/multi_ts.zrx", engine="pandas")
 print(output_multi)
