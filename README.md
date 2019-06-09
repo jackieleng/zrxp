@@ -3,7 +3,7 @@
 ZRXP parser. Uses `parsimonious` for generic grammar definition and parsing, and `pandas` for parsing the time series data block for increased performance.
 
 
-```python
+```
 >>> import zrxp
 >>> ts_list = zrxp.parse_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='pandas')
 >>> ts = ts[0]
