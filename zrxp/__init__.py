@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from parsimonious import Grammar, NodeVisitor
 
 
@@ -80,12 +82,13 @@ def parse(s: str):
     return raw_parse_zrxp(s)
 
 
-with open("05BJ004.HG.datum.O.zrx", "r") as f:
-    s = f.read()
-    output = parse(s)
-    print(output)
+def parse_file(filepath: str):
+    path = Path(filepath)
+    text = path.read_text()
+    return parse(text)
 
-with open("multi_ts.zrx", "r") as f:
-    s = f.read()
-    output_multi = parse(s)
-    print(output_multi)
+
+output = parse_file("data/05BJ004.HG.datum.O.zrx")
+print(output)
+output_multi = parse_file("data/multi_ts.zrx")
+print(output_multi)
