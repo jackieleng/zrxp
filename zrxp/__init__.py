@@ -2,7 +2,7 @@ from parsimonious import Grammar, NodeVisitor
 
 
 # TODO: comments
-grammar = Grammar(
+ZRXP_GRAMMAR = Grammar(
     r"""
     zrxp = single_timeseries+
     single_timeseries = metadata_headers records
@@ -61,20 +61,31 @@ class ZRXPVisitor(NodeVisitor):
         return visited_children or node
 
 
-zv = ZRXPVisitor()
+zrxp_visitor = ZRXPVisitor()
+
+
+def raw_parse_zrxp(s: str):
+    """
+    Parse the zrxp string and return metadata and records unprocessed.
+    """
+    tree = ZRXP_GRAMMAR.parse(s)
+    result = zrxp_visitor.visit(tree)
+    return result
+
+
+def parse(s: str):
+    """
+    Parse zrxp file and split the metadata according to zrxp keywords.
+    """
+    return raw_parse_zrxp(s)
+
+
 with open("05BJ004.HG.datum.O.zrx", "r") as f:
     s = f.read()
-    tree = grammar.parse(s)
-    print(tree)
-
-    output = zv.visit(tree)
+    output = parse(s)
     print(output)
 
-zv = ZRXPVisitor()
 with open("multi_ts.zrx", "r") as f:
     s = f.read()
-    tree_multi = grammar.parse(s)
-    print(tree_multi)
-
-    output_multi = zv.visit(tree_multi)
+    output_multi = parse(s)
     print(output_multi)
