@@ -10,12 +10,12 @@ grammar = Grammar(
     metadata_headers = metadata_header+
     records = record+
 
-    metadata_header = hashtag (metadata_field metadata_sep)+ ws+
+    metadata_header = hashtag (metadata_field metadata_sep)+ ws?
     hashtag = "#"
     metadata_field = ~r"[-\w\.\(\)\,\-\s]+"
     metadata_sep = "|*|"
 
-    record = field (field_sep field)* ws+
+    record = field (field_sep field)* ws?
     field = ~r"[-\w\d\.]+"
     field_sep = ~r"[ \t]+"
 
