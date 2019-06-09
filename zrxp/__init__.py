@@ -18,9 +18,12 @@ ZRXP_GRAMMAR = Grammar(
     hashtag = "#"
     metadata_field = metadata_key? metadata_value
     metadata_key =
-        "ZRXPVERSION" / "ZRXPMODE" / "SANR" / "REXCHANGE" / "TZ" /
-        "SNAME" / "CNR" / "RTIMEVL" / "CUNIT" / "RINVAL" /
-        "RNR" / "LAYOUT"
+        "ZRXPVERSION" / "ZRXPMODE" / "ZRXPCREATOR" /
+        "SANR" / "SNAME" /
+        "REXCHANGE" / "TZ" /
+        "CNR" / "CNAME" / "CTYPE" / "CUNIT" /
+        "RTIMELVL" / "RINVAL" / "RNR" /
+        "LAYOUT" / "TSPATH"
     metadata_value = ~r"((?!(\|\*\|)).)+"
     metadata_sep = "|*|"
 
@@ -49,9 +52,12 @@ ZRXP_GRAMMAR_SIMPLE = Grammar(
     metadata_header = hashtag (metadata_field metadata_sep+)+ ws
     metadata_field = metadata_key? metadata_value
     metadata_key =
-        "ZRXPVERSION" / "ZRXPMODE" / "SANR" / "REXCHANGE" / "TZ" /
-        "SNAME" / "CNR" / "RTIMEVL" / "CUNIT" / "RINVAL" /
-        "RNR" / "LAYOUT"
+        "ZRXPVERSION" / "ZRXPMODE" / "ZRXPCREATOR" /
+        "SANR" / "SNAME" /
+        "REXCHANGE" / "TZ" /
+        "CNR" / "CNAME" / "CTYPE" / "CUNIT" /
+        "RTIMELVL" / "RINVAL" / "RNR" /
+        "LAYOUT" / "TSPATH"
     metadata_value = ~r"((?!(\|\*\|)).)+"
     metadata_sep = "|*|"
 
