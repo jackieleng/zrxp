@@ -12,9 +12,14 @@ ZRXP_GRAMMAR = Grammar(
     metadata_headers = metadata_header+
     records = record+
 
-    metadata_header = hashtag (metadata_field metadata_sep)+ ws
+    metadata_header = hashtag (metadata_field metadata_sep+)+ ws
     hashtag = "#"
-    metadata_field = ~r"((?!(\|\*\|)).)+"
+    metadata_field = metadata_key? metadata_value
+    metadata_key =
+        "ZRXPVERSION" / "ZRXPMODE" / "SANR" / "REXCHANGE" / "TZ" /
+        "SNAME" / "CNR" / "RTIMEVL" / "CUNIT" / "RINVAL" /
+        "RNR" / "LAYOUT"
+    metadata_value = ~r"((?!(\|\*\|)).)+"
     metadata_sep = "|*|"
 
     record = field (field_sep field)* ws
@@ -46,6 +51,16 @@ class ZRXPVisitor(NodeVisitor):
         return [field for (field, sep) in metadata]
 
     def visit_metadata_field(self, node, visited_children):
+        k, v = visited_children
+        try:
+            return (k[0], v)
+        except TypeError:
+            return (k.text, v)
+
+    def visit_metadata_key(self, node, visited_children):
+        return node.text
+
+    def visit_metadata_value(self, node, visited_children):
         return node.text
 
     def visit_records(self, node, visited_children):
@@ -90,5 +105,7 @@ def parse_file(filepath: str):
 
 output = parse_file("data/05BJ004.HG.datum.O.zrx")
 print(output)
-output_multi = parse_file("data/multi_ts.zrx")
-print(output_multi)
+# output2 = parse_file("data/K-Greim-SG-cmd-2000-2004.zrx")
+# print(output2)
+# output_multi = parse_file("data/multi_ts.zrx")
+# print(output_multi)
