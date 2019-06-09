@@ -8,7 +8,7 @@ increased performance.
 ```
 >>> import zrxp
 >>> ts_list = zrxp.parse_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='pandas')
->>> ts = ts[0]
+>>> ts = ts_list[0]
 >>> ts['metadata']
 [('TZ', 'UTC+1'),
  ('CTYPE', 'n-min-ip'),
