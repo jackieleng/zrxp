@@ -155,11 +155,14 @@ class SimpleZRXPVisitor(NodeVisitor):
         return visited_children or node
 
 
+zrxp_visitor = ZRXPVisitor()
+simple_zrxp_visitor = SimpleZRXPVisitor()
+
+
 def parse(s: str):
     """
     Parse zrxp file and split the metadata according to zrxp keywords.
     """
-    zrxp_visitor = ZRXPVisitor()
     tree = ZRXP_GRAMMAR.parse(s)
     return zrxp_visitor.visit(tree)
 
@@ -168,9 +171,8 @@ def parse_pandas(s: str):
     """
     Parse zrxp string and use pandas for parsing records.
     """
-    zrxp_visitor = SimpleZRXPVisitor()
     tree = ZRXP_GRAMMAR_SIMPLE.parse(s)
-    result = zrxp_visitor.visit(tree)
+    result = simple_zrxp_visitor.visit(tree)
     for ts in result:
         ts["records"] = pd.read_csv(StringIO(ts["records"].text))
     return result
