@@ -7,7 +7,7 @@ increased performance.
 
 ```python
 >>> import zrxp
->>> # read a ZRXP file and retrieve the first data set
+>>> # read a ZRXP file and retrieve the first time series
 >>> ts_list = zrxp.read_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='pandas')
 >>> ts = ts_list[0]
 >>> # get metadata
