@@ -5,7 +5,7 @@ and (optionally) `pandas` for parsing the time series data block with
 increased performance.
 
 
-```
+```python
 >>> import zrxp
 >>> ts_list = zrxp.parse_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='pandas')
 >>> ts = ts_list[0]
@@ -26,7 +26,7 @@ increased performance.
 
 ## Benchmarks
 
-```
+```python
 In [19]: %timeit a = zrxp.read_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='csv')
 130 ms ± 969 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
 
