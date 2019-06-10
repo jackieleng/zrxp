@@ -37,5 +37,5 @@ In [21]: %timeit a = zrxp.read_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engin
 9.32 s ± 62.5 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 ```
 
-Apparently csv is faster than pandas. But for single runs this is almost
-never the case...
+Apparently csv is faster than pandas, but pandas has data frame overhead, so more
+tests are needed...
