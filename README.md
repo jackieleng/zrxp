@@ -7,7 +7,7 @@ increased performance.
 
 ```python
 >>> import zrxp
->>> ts_list = zrxp.parse_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='pandas')
+>>> ts_list = zrxp.read_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='pandas')
 >>> ts = ts_list[0]
 >>> ts['metadata']
 [('TZ', 'UTC+1'),
