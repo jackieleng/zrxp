@@ -7,14 +7,17 @@ increased performance.
 
 ```python
 >>> import zrxp
+>>> # read a ZRXP file and retrieve the first data set
 >>> ts_list = zrxp.read_file('./data/K-Greim-SG-cmd-2000-2004.zrx', engine='pandas')
 >>> ts = ts_list[0]
+>>> # get metadata
 >>> ts['metadata']
 [('TZ', 'UTC+1'),
  ('CTYPE', 'n-min-ip'),
  ('CUNIT', 'M'),
  ('RINVAL', '-777'),
  ('RNR', '-1')]
+>>> # get time series data
 >>> ts['records'].head()
 0  20000101000000 2.26   127 3
 1  20000101001500 2.26   127 3
